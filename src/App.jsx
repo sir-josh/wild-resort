@@ -1,6 +1,8 @@
 import React from "react";
-import GlobalStyles from "./styles/GlobalStyles";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+
 import Login from "./pages/Login";
 import Cabins from "./pages/Cabins";
 import NewUsers from "./pages/Users";
@@ -11,9 +13,21 @@ import Settings from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
 import PageNotFound from "./pages/PageNotFound";
 
+
+import GlobalStyles from "./styles/GlobalStyles";
+
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			staleTime: 60 * 1000,
+		},
+	},
+});
+
 const App = () => {
 	return (
-		<>
+		<QueryClientProvider client={queryClient}>
+			<ReactQueryDevtools />
 			<GlobalStyles />
 			<BrowserRouter>
 				<Routes>
@@ -33,7 +47,7 @@ const App = () => {
 					<Route path="*" element={<PageNotFound />} />
 				</Routes>
 			</BrowserRouter>
-		</>
+		</QueryClientProvider>
 	);
 };
 
@@ -50,5 +64,5 @@ export default App;
 // -API interaction server
 // -customer-facing website where customers will be able to book
 // stays, using the above API
-// Besides some minor things like not storing full names and 
+// Besides some minor things like not storing full names and
 //not using computed columns,
