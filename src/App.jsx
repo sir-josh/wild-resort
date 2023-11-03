@@ -50,3 +50,5 @@ export default App;
 // -API interaction server
 // -customer-facing website where customers will be able to book
 // stays, using the above API
+// Besides some minor things like not storing full names and 
+//not using computed columns,
