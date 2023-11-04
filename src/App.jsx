@@ -13,8 +13,8 @@ import Settings from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
 import PageNotFound from "./pages/PageNotFound";
 
-
 import GlobalStyles from "./styles/GlobalStyles";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -48,6 +48,26 @@ const App = () => {
 					<Route path="*" element={<PageNotFound />} />
 				</Routes>
 			</BrowserRouter>
+			<Toaster
+				position="top-right"
+				gutter={12}
+				containerStyle={{ margin: "8px" }}
+				toastOptions={{
+					success: {
+						duration: 3000,
+					},
+					error: {
+						duration: 5000,
+					},
+					style: {
+						fontSize: "16px",
+						maxWidth: "400px",
+						padding: "16px 24px",
+						backgroundColor: "var(--color-grey-400)",
+						color: "var(--color-grey-700)",
+					},
+				}}
+			/>
 		</QueryClientProvider>
 	);
 };
