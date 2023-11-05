@@ -1,8 +1,9 @@
+import { useState } from "react";
 import styled from "styled-components";
+
+import CreateCabinForm from "./CreateCabinForm.jsx";
+import { useDeleteCabin } from "./useDeleteCabin.js";
 import { formatCurrency } from "../../utils/helpers.js";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCabin } from "../../services/apiCabins.js";
-import toast from "react-hot-toast";
 
 const TableRow = styled.div`
 	display: grid;
@@ -44,6 +45,8 @@ const Discount = styled.div`
 `;
 
 function CabinRow({ cabin }) {
+	const [showEditForm, setShowEditForm] = useState(false);
+
 	const {
 		id: cabinId,
 		name,
@@ -53,32 +56,37 @@ function CabinRow({ cabin }) {
 		discount,
 	} = cabin;
 
-	const queryClient = useQueryClient();
-
-	const { isLoading: isDeleting, mutate } = useMutation({
-		// just pass in deleteCabin since the id params is the same for both
-		mutationFn: (id) => deleteCabin(id),
-		onSuccess: () => {
-			toast.success("Cabin successfully deleted");
-      
-			queryClient.invalidateQueries({
-				queryKey: ["cabins"],
-			});
-		},
-		onError: (err) => toast.error(err.message),
-	});
+	const { isDeleting, deleteCabin } = useDeleteCabin();
 
 	return (
-		<TableRow role="row">
-			<Img src={image} />
-			<Cabin>{name}</Cabin>
-			<div>Fits up to {maxCapacity}</div>
-			<Price>{formatCurrency(regularPrice)}</Price>
-			<Discount>{formatCurrency(discount)}</Discount>
-			<button onClick={() => mutate(cabinId)} disabled={isDeleting}>
-				Delete
-			</button>
-		</TableRow>
+		<>
+			<TableRow role="row">
+				<Img src={image} />
+				<Cabin>{name}</Cabin>
+				<div>Fits up to {maxCapacity}</div>
+				<Price>{formatCurrency(regularPrice)}</Price>
+				{discount ? (
+					<Discount>{formatCurrency(discount)}</Discount>
+				) : (
+					<span>&mdash;</span>
+				)}
+				<div>
+					<button
+						style={{ padding: "2px 4px" }}
+						onClick={() => setShowEditForm((show) => !show)}>
+						Edit
+					</button>
+					&nbsp;
+					<button
+						style={{ padding: "2px 4px" }}
+						onClick={() => deleteCabin(cabinId)}
+						disabled={isDeleting}>
+						Delete
+					</button>
+				</div>
+			</TableRow>
+			{showEditForm && <CreateCabinForm cabinToEdit={cabin} />}
+		</>
 	);
 }
 

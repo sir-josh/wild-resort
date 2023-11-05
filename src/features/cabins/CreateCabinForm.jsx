@@ -1,7 +1,4 @@
-import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import { createCabin } from "../../services/apiCabins.js";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Form from "../../ui/Form";
 import Input from "../../ui/Input";
@@ -9,31 +6,48 @@ import Button from "../../ui/Button";
 import Textarea from "../../ui/Textarea";
 import FileInput from "../../ui/FileInput";
 import FormRow from "../../ui/FormRow.jsx";
+import useCreateCabin from "./useCreateCabin.js";
+import useEditCabin from "./useEditCabin.js";
 
-function CreateCabinForm() {
+function CreateCabinForm({ cabinToEdit = {} }) {
+	const { id: editId, ...editValues } = cabinToEdit;
+	const isEditSession = Boolean(editId);
+	const { isEditing, editCabin } = useEditCabin();
+  const { isCreating, createCabin } = useCreateCabin();
+
+	const isExecuting = isCreating || isEditing;
+
 	const {
 		register,
 		handleSubmit,
 		reset,
 		getValues,
 		formState: { errors },
-	} = useForm();
-	const queryClient = useQueryClient();
-
-	const { mutate, isLoading: isCreating } = useMutation({
-		mutationFn: createCabin,
-		onSuccess: () => {
-			toast.success("Cabin created successfully");
-			queryClient.invalidateQueries({
-				queryKey: ["cabins"],
-			});
-			reset();
-		},
-		onError: (err) => toast.error(err.message),
+	} = useForm({
+		defaultValues: isEditSession ? editValues : {},
 	});
 
 	function onSubmit(data) {
-		mutate({ ...data, image: data.image[0] });
+		const image =
+			typeof data.image === "string" ? data.image : data.image[0];
+
+		if (isEditSession)
+			editCabin(
+				{ newCabinData: { ...data, image }, id: editId },
+				{
+					onSuccess: () => reset(),
+				},
+			);
+		else
+			createCabin(
+				{ ...data, image: image },
+				{
+					onSuccess: (data) => {
+						// console.log(data);
+						reset();
+					},
+				},
+			);
 	}
 
 	function onError(errors) {
@@ -47,7 +61,7 @@ function CreateCabinForm() {
 				<Input
 					type="text"
 					id="name"
-					disabled={isCreating}
+					disabled={isExecuting}
 					{...register("name", {
 						required: "This field is required",
 					})}
@@ -60,7 +74,7 @@ function CreateCabinForm() {
 				<Input
 					type="number"
 					id="maxCapacity"
-					disabled={isCreating}
+					disabled={isExecuting}
 					{...register("maxCapacity", {
 						required: "This field is required",
 						min: {
@@ -77,7 +91,7 @@ function CreateCabinForm() {
 				<Input
 					type="number"
 					id="regularPrice"
-					disabled={isCreating}
+					disabled={isExecuting}
 					{...register("regularPrice", {
 						required: "This field is required",
 					})}
@@ -89,7 +103,7 @@ function CreateCabinForm() {
 					type="number"
 					id="discount"
 					defaultValue={0}
-					disabled={isCreating}
+					disabled={isExecuting}
 					{...register("discount", {
 						required: "This field is required",
 						validate: (value) =>
@@ -106,7 +120,6 @@ function CreateCabinForm() {
 					type="number"
 					id="description"
 					defaultValue=""
-					disabled={isCreating}
 					{...register("description", {
 						required: "This field is required",
 					})}
@@ -118,20 +131,56 @@ function CreateCabinForm() {
 					id="image"
 					accept="image/*"
 					{...register("image", {
-						required: "This field is required",
+						required: isEditSession
+							? false
+							: "This field is required",
 					})}
 				/>
 			</FormRow>
 
 			<FormRow>
 				{/* type is an HTML attribute! */}
-				<Button variation="secondary" type="reset">
+				<Button $variation="secondary" type="reset">
 					Cancel
 				</Button>
-				<Button disabled={isCreating}>Add cabin</Button>
+				<Button disabled={isCreating}>
+					{isEditSession ? "Edit cabin" : "Create new cabin"}
+				</Button>
 			</FormRow>
 		</Form>
 	);
 }
 
 export default CreateCabinForm;
+
+// {
+// 	/* <FileInput
+// id="image_url"
+// accept="image/*"
+// {...register("image_url", {
+//   validate: (fileData) => {
+//     if (typeof fileData === "string" || fileData?.length === 1)
+//       return true;
+//     return "File is required";
+//   },
+// })}
+// />
+// //////////////////////////////
+// function onSubmit(data) {
+//     let image =
+//       typeof data.image === "object" && data.image.length > 0
+//         ? data.image[0]
+//         : cabinToEdit.image;
+
+//     if (isEditSession) {
+//       editCabin({ newCabinData: { ...data, image }, id: editId });
+//     } else createCabin({ ...data, image });
+//   }
+// ///////////////////////////////////
+// const { data, error } = await supabase
+//     .from("cabins")
+//     .select("*")
+//     .order("created_at", { ascending: true });
+
+// */
+// }
