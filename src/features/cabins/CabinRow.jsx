@@ -1,9 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { HiTrash, HiPencil, HiSquare2Stack } from "react-icons/hi2";
 
 import CreateCabinForm from "./CreateCabinForm.jsx";
 import { useDeleteCabin } from "./useDeleteCabin.js";
 import { formatCurrency } from "../../utils/helpers.js";
+import useCreateCabin from "./useCreateCabin.js";
 
 const TableRow = styled.div`
 	display: grid;
@@ -44,8 +46,12 @@ const Discount = styled.div`
 	color: var(--color-green-700);
 `;
 
+const buttonPadStyle = { padding: "2px 4px", marginRight: "4px" };
+
 function CabinRow({ cabin }) {
 	const [showEditForm, setShowEditForm] = useState(false);
+	const { isDeleting, deleteCabin } = useDeleteCabin();
+	const { isCreating, createCabin } = useCreateCabin();
 
 	const {
 		id: cabinId,
@@ -53,10 +59,20 @@ function CabinRow({ cabin }) {
 		image,
 		maxCapacity,
 		regularPrice,
+		description,
 		discount,
 	} = cabin;
 
-	const { isDeleting, deleteCabin } = useDeleteCabin();
+	function handleDuplicate() {
+		createCabin({
+			name: `Copy of ${name}`,
+			image,
+			maxCapacity,
+			regularPrice,
+			description,
+			discount,
+		});
+	}
 
 	return (
 		<>
@@ -72,16 +88,22 @@ function CabinRow({ cabin }) {
 				)}
 				<div>
 					<button
-						style={{ padding: "2px 4px" }}
+						style={buttonPadStyle}
+						onClick={handleDuplicate}
+						disabled={isCreating}>
+						<HiSquare2Stack />
+					</button>
+					<button
+						style={buttonPadStyle}
 						onClick={() => setShowEditForm((show) => !show)}>
-						Edit
+						<HiPencil />
 					</button>
 					&nbsp;
 					<button
 						style={{ padding: "2px 4px" }}
 						onClick={() => deleteCabin(cabinId)}
 						disabled={isDeleting}>
-						Delete
+						<HiTrash />
 					</button>
 				</div>
 			</TableRow>
