@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { HiXMark } from "react-icons/hi2";
+import { createPortal } from "react-dom";
+import { cloneElement, createContext, useContext, useState } from "react";
 
 const StyledModal = styled.div`
 	position: fixed;
@@ -48,3 +51,61 @@ const Button = styled.button`
 		color: var(--color-grey-500);
 	}
 `;
+
+const ModalContext = createContext();
+
+function Modal({ children }) {
+	const [modalName, setModalName] = useState("");
+
+	//This close() handler:- sets the modal name back to nothing.
+	const close = () => setModalName("");
+
+	//Re-assigns <setModalName> function to "openModal" variable
+	const openModal = setModalName;
+
+	return (
+		<ModalContext.Provider value={{ modalName, close, openModal }}>
+			{children}
+		</ModalContext.Provider>
+	);
+}
+
+function OpenModalBtn({ children, opens: modalNameToOpen }) {
+	const { openModal } = useContext(ModalContext);
+
+	//Below, we want to add "openModal" state/prop to the children
+	//element(eg. button), this is done using cloneElement() in react
+	//[more from the react doc]. Here: the cloned Element will be in
+	//form like this
+	// <Children onClick={() => openModal(modalNameToOpen)}>
+	//     {children element innerText}
+	// <Children/>
+
+	// return children;
+	return cloneElement(children, {
+		onClick: () => openModal(modalNameToOpen),
+	});
+}
+
+// The modal window
+function Window({ children, name }) {
+	const { modalName, close } = useContext(ModalContext);
+	if (name !== modalName) return null;
+
+	return createPortal(
+		<Overlay>
+			<StyledModal>
+				<Button onClick={close}>
+					<HiXMark />
+				</Button>
+				<div>{cloneElement(children, { onCloseModal: close })}</div>
+			</StyledModal>
+		</Overlay>,
+		document.body,
+	);
+}
+
+Modal.Open = OpenModalBtn;
+Modal.Window = Window;
+
+export default Modal;
