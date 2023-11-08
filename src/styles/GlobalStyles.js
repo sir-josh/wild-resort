@@ -41,10 +41,17 @@ const GlobalStyles = createGlobalStyle`
   --color-red-800: #991b1b;
 
   --backdrop-color: rgba(255, 255, 255, 0.1);
+  --backdrop-color-dark: rgba(17, 24, 39, 0.56);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0px 0.6rem 2.4rem rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 2.4rem 3.2rem rgba(0, 0, 0, 0.12);
+  --shadow-custom:  0 1px 1px hsl(0deg 0% 0% / 0.075),
+		0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075),
+		0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075);
+  --shadow-menu:  rgba(0, 0, 0, 0.4) 0px 2px 4px,
+		rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+		rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 
   --border-radius-tiny: 3px;
   --border-radius-sm: 5px;
