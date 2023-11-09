@@ -13,6 +13,16 @@ function CabinTable() {
 
 	if (isLoading) return <Spinner />;
 
+	// function compareText(a, b) {
+	// 	if (a[field].toLowerCase() < b[field].toLowerCase()) {
+	// 		return -1 * modifier;
+	// 	}
+	// 	if (a[field].toLowerCase() > b[field].toLowerCase()) {
+	// 		return 1 * modifier;
+	// 	}
+	// 	return 0;
+	// }
+
 	//1) Filter
 	const filterValue = searchParams.get("discount") || "all";
 	let filteredCabins;
@@ -26,9 +36,11 @@ function CabinTable() {
 	const sortBy = searchParams.get("sortBy") || "name-asc";
 	const [field, direction] = sortBy.split("-");
 	const modifier = direction === "asc" ? 1 : -1;
-	const sortedCabins = filteredCabins.sort(
-		(a, b) => (a[field] - b[field]) * modifier,
-	);
+	const sortedCabins =
+		field === "name"
+			? filteredCabins.sort(
+					(a, b) => a.name.localeCompare(b.name) * modifier)
+			: filteredCabins.sort((a, b) => (a[field] - b[field]) * modifier);
 
 	return (
 		<Menus>
