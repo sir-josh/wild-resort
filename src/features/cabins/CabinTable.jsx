@@ -1,17 +1,19 @@
-// import styled from "styled-components";
+import { useSearchParams } from "react-router-dom";
 
 import CabinRow from "./CabinRow.jsx";
+import Menus from "../../ui/Menus.jsx";
+import Empty from "../../ui/Empty.jsx";
+import Table from "../../ui/Table.jsx";
 import Spinner from "../../ui/Spinner.jsx";
 import { useCabins } from "./useCabins.js";
-import Table from "../../ui/Table.jsx";
-import Menus from "../../ui/Menus.jsx";
-import { useSearchParams } from "react-router-dom";
 
 function CabinTable() {
 	const { isLoading, cabins } = useCabins();
 	const [searchParams] = useSearchParams();
 
 	if (isLoading) return <Spinner />;
+
+	if (!cabins.length) return <Empty resource="cabins" />;
 
 	// function compareText(a, b) {
 	// 	if (a[field].toLowerCase() < b[field].toLowerCase()) {
