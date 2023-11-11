@@ -3,6 +3,7 @@ import styled from "styled-components";
 const StyledCheckbox = styled.div`
 	display: flex;
 	gap: 1.6rem;
+	position: relative;
 
 	& input[type="checkbox"] {
 		height: 2.4rem;
@@ -13,7 +14,14 @@ const StyledCheckbox = styled.div`
 	}
 
 	& input[type="checkbox"]:disabled {
-		accent-color: var(--color-brand-600);
+		box-shadow: 0 0 3px var(--color-grey-900);
+	}
+	
+	& input[type="checkbox"]:disabled + label:before {
+		content: "✓";
+		position: absolute;
+		margin-left: -3.3rem;
+		color: var(--backdrop-color-dark);
 	}
 
 	& label {

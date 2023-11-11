@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
+import { PiCurrencyNgnFill } from "react-icons/pi";
 import {
 	HiOutlineChatBubbleBottomCenterText,
 	HiOutlineCheckCircle,
-	HiOutlineCurrencyDollar,
 	HiOutlineHomeModern,
 } from "react-icons/hi2";
 
@@ -175,7 +175,7 @@ function BookingDataBox({ booking }) {
 
 				<Price $isPaid={isPaid}>
 					<DataItem
-						icon={<HiOutlineCurrencyDollar />}
+						icon={<PiCurrencyNgnFill />}
 						label={`Total price`}>
 						{formatCurrency(totalPrice)}
 

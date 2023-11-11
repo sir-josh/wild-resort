@@ -10,7 +10,7 @@ export function useBookingDetail() {
 		data: booking, //eslint-disable-next-line
 		error,
 	} = useQuery({
-		queryKey: ["booking"],
+		queryKey: ["booking", bookingId],
 		queryFn: () => getBooking(bookingId),
 		retry: false,
 	});
