@@ -1,3 +1,4 @@
+import BookingFilterAndSort from "../features/bookings/BookingFilterAndSort.jsx";
 import BookingTable from "../features/bookings/BookingTable.jsx";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
@@ -8,7 +9,7 @@ function Bookings() {
 		<>
 			<Row type="horizontal">
 				<Heading as="h1">All bookings</Heading>
-				<p>TEST</p>
+				<BookingFilterAndSort />
 			</Row>
 			<BookingTable />
 		</>
