@@ -17,14 +17,19 @@ export function useBookings() {
 	const [field, direction] = sortByParams.split("-");
 	const sortBy = { field, direction };
 
+	//PAGINATION
+	const page = !searchParams.get("page")
+		? 1
+		: Number(searchParams.get("page"));
+
 	const {
 		isLoading,
-		data: bookings, //eslint-disable-next-line
+		data: { data: bookings, count } = {}, //eslint-disable-next-line
 		error,
 	} = useQuery({
-		queryKey: ["bookings", filter, sortBy],
-		queryFn: () => getAllBookings({ filter, sortBy }),
+		queryKey: ["bookings", filter, sortBy, page],
+		queryFn: () => getAllBookings({ filter, sortBy, page }),
 	});
 
-	return { isLoading, bookings, error };
+	return { isLoading, bookings, error, count };
 }
