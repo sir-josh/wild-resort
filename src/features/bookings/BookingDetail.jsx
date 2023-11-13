@@ -1,17 +1,19 @@
 import styled from "styled-components";
-
-import BookingDataBox from "./BookingDataBox";
-import Row from "../../ui/Row";
-import Heading from "../../ui/Heading";
-import Tag from "../../ui/Tag";
-import ButtonGroup from "../../ui/ButtonGroup";
-import Button from "../../ui/Button";
-import ButtonText from "../../ui/ButtonText";
+import { useNavigate } from "react-router-dom";
+import { HiArrowUpOnSquare } from "react-icons/hi2";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
 import { useBookingDetail } from "./useBookingDetail.js";
+
+import Tag from "../../ui/Tag";
+import Row from "../../ui/Row";
+import Button from "../../ui/Button";
+import Heading from "../../ui/Heading";
 import Spinner from "../../ui/Spinner.jsx";
-import { useNavigate } from "react-router-dom";
+import ButtonText from "../../ui/ButtonText";
+import BookingDataBox from "./BookingDataBox";
+import ButtonGroup from "../../ui/ButtonGroup";
+import { useCheckout } from "../check-in-out/useCheckout.js";
 
 const HeadingGroup = styled.div`
 	display: flex;
@@ -21,8 +23,9 @@ const HeadingGroup = styled.div`
 
 function BookingDetail() {
 	const navigate = useNavigate();
-	const { booking, isLoading } = useBookingDetail();
 	const moveBack = useMoveBack();
+	const { booking, isLoading } = useBookingDetail();
+	const { checkout, isCheckingOut } = useCheckout();
 
 	if (isLoading) return <Spinner />;
 
@@ -52,6 +55,14 @@ function BookingDetail() {
 				{status === "unconfirmed" && (
 					<Button onClick={() => navigate(`/checkin/${bookingId}`)}>
 						Check in
+					</Button>
+				)}
+				{status === "checked-in" && (
+					<Button
+						icon={<HiArrowUpOnSquare />}
+						disabled={isCheckingOut}
+						onClick={() => checkout(bookingId)}>
+						Check out
 					</Button>
 				)}
 				<Button $variation="secondary" onClick={moveBack}>
