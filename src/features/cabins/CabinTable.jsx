@@ -46,7 +46,7 @@ function CabinTable() {
 
 	return (
 		<Menus>
-			<Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
+			<Table columns="0.6fr 1.8fr 2fr 1.5fr 1fr 0.5fr">
 				<Table.Header>
 					<div>#</div>
 					<div>Cabin</div>

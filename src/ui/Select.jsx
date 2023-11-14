@@ -6,7 +6,7 @@ const StyledSelect = styled.select`
 	border: 1px solid
 		${(props) =>
 			props.type === "white"
-				? "var(--color-grey-400)"
+				? "var(--color-grey-200)"
 				: "var(--color-grey-300)"};
 	border-radius: var(--border-radius-sm);
 	background-color: var(--color-grey-0);
