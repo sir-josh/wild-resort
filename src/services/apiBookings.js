@@ -21,7 +21,7 @@ export async function getAllBookings({ filter, sortBy, page }) {
 	if (page) {
 		const from = (page - 1) * PAGE_SIZE;
 		const to = from + PAGE_SIZE - 1;
-    
+
 		query = query.range(from, to);
 	}
 
@@ -50,7 +50,11 @@ export async function getBooking(id) {
 	return data;
 }
 
-// Returns all BOOKINGS that are were created after the given date. Useful to get bookings created in the last 30 days, for example.
+// Returns all BOOKINGS that are were created after the given date.
+//Useful to get bookings created in the last 30 days, for example.
+/*
+ * date: needs to be ISO string, this is expected by supabase
+ */
 export async function getBookingsAfterDate(date) {
 	const { data, error } = await supabase
 		.from("bookings")
