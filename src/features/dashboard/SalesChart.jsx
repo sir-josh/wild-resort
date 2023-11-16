@@ -27,11 +27,15 @@ const StyledSalesChart = styled(DashboardBox)`
 function SalesChart({ bookings, numDays }) {
 	const { isDarkMode } = useDarkMode();
 
+  // allDates:- get the interval period of (numDays) in date format
 	const allDates = eachDayOfInterval({
 		start: subDays(new Date(), numDays - 1),
 		end: new Date(),
 	});
 
+  // salesData: generates data object from allDates interval period
+  // required for the Area Chart in the pattern below
+  // {"label": "Nov 10", "totalSales": 64120, "extrasSales": 120}
 	const salesData = allDates.map((date) => {
 		return {
 			label: format(date, "MMM dd"),
@@ -49,6 +53,7 @@ function SalesChart({ bookings, numDays }) {
 	});
 
 	/*eslint no-mixed-spaces-and-tabs: ["error", "smart-tabs"]*/
+  //colors:- Various color format for the Area Chart in dark/light mode
 	const colors = isDarkMode
 		? {
 				totalSales: { stroke: "#4f46e5", fill: "#4f46e5" },
@@ -62,8 +67,9 @@ function SalesChart({ bookings, numDays }) {
 				text: "#374151",
 				background: "#fff",
 		  };
-
-	const DataFormater = (number) => {
+  
+  // dataFormater: custom format for the Y-axis of the area chart
+	const dataFormater = (number) => {
 		if (number > 1000000000) {
 			return formatCurrency(number / 1000000000).toString() + "B";
 		} else if (number > 1000000) {
@@ -78,10 +84,11 @@ function SalesChart({ bookings, numDays }) {
 	return (
 		<StyledSalesChart>
 			<Heading as="h2">
-				Sales from {format(allDates.at(0), "MMM dd, yyyy")} &mdash;{" "}
-				{format(allDates.at(-1), "MMM dd, yyyy")}
+				Sales from &nbsp; {format(allDates.at(0), "MMM dd, yyyy")}{" "}
+				&mdash; {format(allDates.at(-1), "MMM dd, yyyy")}
 			</Heading>
 
+			{/* Area Charts from recharts lib */}
 			<ResponsiveContainer height={300} width="100%">
 				<AreaChart data={salesData} margin={{ left: 10, right: 10 }}>
 					<XAxis
@@ -93,12 +100,16 @@ function SalesChart({ bookings, numDays }) {
 						// unit={`${nairaCurrency()}`}
 						tick={{ fill: colors.text.fill }}
 						tickLine={{ stroke: colors.text.stroke }}
-						tickFormatter={DataFormater}
+						tickFormatter={dataFormater}
 					/>
 					<CartesianGrid strokeDasharray="4" />
 					<Tooltip
+						// content={<CustomTooltip />}
 						contentStyle={{ background: colors.background }}
-						formatter={(value) => [formatCurrency(value)]}
+						formatter={(value, name, props) => [
+							formatCurrency(value),
+							name,
+						]}
 					/>
 					<Area
 						dataKey="totalSales"
