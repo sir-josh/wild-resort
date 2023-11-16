@@ -34,3 +34,14 @@ export const formatCurrency = (value) => {
 
 	return `${nairaSymbol} ${new Intl.NumberFormat().format(value)}`;
 };
+
+export const nairaCurrency = () => {
+	const [nairaSymbol] = new Intl.NumberFormat("en-NG", {
+		style: "currency",
+		currency: "NGN",
+	})
+		.format(100)
+		.split("");
+
+	return nairaSymbol;
+};
