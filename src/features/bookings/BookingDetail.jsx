@@ -18,6 +18,7 @@ import ButtonText from "../../ui/ButtonText";
 import BookingDataBox from "./BookingDataBox";
 import ButtonGroup from "../../ui/ButtonGroup";
 import ConfirmDelete from "../../ui/ConfirmDelete.jsx";
+import Empty from "../../ui/Empty.jsx";
 
 const HeadingGroup = styled.div`
 	display: flex;
@@ -33,6 +34,7 @@ function BookingDetail() {
 	const { deleteBooking, isDeleting } = useDeleteBooking();
 
 	if (isLoading) return <Spinner />;
+	if(!booking) return <Empty resource="booking" />
 
 	const { status, id: bookingId } = booking;
 

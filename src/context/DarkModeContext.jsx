@@ -5,8 +5,12 @@ import { useEffect } from "react";
 const DarkModeContext = createContext();
 
 function DarkModeProvider({ children }) {
+	const userSystemColorMode = window.matchMedia(
+		"(prefers-color-scheme: dark)",
+	).matches;  // This returns boolean value
+
 	const [isDarkMode, setIsDarkMode] = useLocalStorageState(
-		false,
+		userSystemColorMode,
 		"isDarkMode",
 	);
 
