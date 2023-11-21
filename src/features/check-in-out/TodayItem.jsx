@@ -38,10 +38,10 @@ function TodayItem({ activity }) {
 
 			{status === "unconfirmed" && (
 				<Button
-					size="small"
+					$sizes="small"
 					$variation="primary"
 					as={Link}
-					to={`checkin/${id}`}>
+					to={`/checkin/${id}`}>
 					Check in
 				</Button>
 			)}

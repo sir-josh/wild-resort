@@ -44,7 +44,6 @@ function TodayActivity() {
 
 	if (isLoading) return <Spinner />;
 
-	console.log(activities);
 	return (
 		<StyledToday>
 			<Row type="horizontal">
