@@ -13,10 +13,10 @@ const StyledInput = styled.input`
 	box-shadow: var(--shadow-sm);
 `;
 
-function Input() {
+function Input(props) {
 	const { isDarkMode } = useDarkMode();
 
-	return <StyledInput $colorDark={isDarkMode} />;
+	return <StyledInput $colorDark={isDarkMode} {...props} />;
 }
 
 export default Input;

@@ -1,4 +1,3 @@
-import { isToday } from "date-fns";
 import { PAGE_SIZE } from "../utils/contants.js";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
