@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useDarkMode } from "../context/DarkModeContext.jsx";
+import { forwardRef } from "react";
 
 const StyledInput = styled.input`
 	border: 1px solid
@@ -13,10 +14,10 @@ const StyledInput = styled.input`
 	box-shadow: var(--shadow-sm);
 `;
 
-function Input(props) {
+const Input = forwardRef(function Input(props, ref) {
 	const { isDarkMode } = useDarkMode();
 
-	return <StyledInput $colorDark={isDarkMode} {...props} />;
-}
+	return <StyledInput $colorDark={isDarkMode} {...props} ref={ref} />;
+});
 
 export default Input;
