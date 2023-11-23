@@ -91,17 +91,3 @@ const App = () => {
 };
 
 export default App;
-
-// Wild Oasis[Internal Hotel Management App]- a small boutique
-// hotel with 8 luxurious wooden cabins.
-
-// Features
-// -custom-built application to manage everything about the hotel:
-// bookings, cabins and guests.
-// -internal application used inside the hotel to check in guests
-// as they arrive
-// -API interaction server
-// -customer-facing website where customers will be able to book
-// stays, using the above API
-// Besides some minor things like not storing full names and
-//not using computed columns,
