@@ -7,7 +7,7 @@ const DarkModeContext = createContext();
 function DarkModeProvider({ children }) {
 	const userSystemColorMode = window.matchMedia(
 		"(prefers-color-scheme: dark)",
-	).matches;  // This returns boolean value
+	).matches; // This returns boolean value
 
 	const [isDarkMode, setIsDarkMode] = useLocalStorageState(
 		userSystemColorMode,
@@ -47,4 +47,5 @@ function useDarkMode() {
 	return context;
 }
 
+//eslint-disable-next-line
 export { DarkModeProvider, useDarkMode };
